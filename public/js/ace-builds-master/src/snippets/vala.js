@@ -153,7 +153,7 @@ exports.snippets = [
     },
     {
         "content": "@\"${1:\\$var}\"",
-        "name": "String template (@)",
+        "name": "String emails (@)",
         "scope": "vala",
         "tabTrigger": "@"
     },
@@ -198,4 +198,3 @@ exports.scope = "";
                         }
                     });
                 })();
-            

@@ -105,7 +105,7 @@ snippet stackedinline\n\
 		model = $1\n\
 \n\
 snippet r2r\n\
-	return render_to_response('${1:template.html}', {\n\
+	return render_to_response('${1:emails.html}', {\n\
 			${2}\n\
 		}${3:, context_instance=RequestContext(request)}\n\
 	)\n\
@@ -120,4 +120,3 @@ exports.scope = "django";
                         }
                     });
                 })();
-            

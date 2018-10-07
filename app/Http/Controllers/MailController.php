@@ -9,15 +9,22 @@ use App\User;
 
 class MailController extends Controller
 {
+    /**
+     *  Mail method for sending mail to all users on creation of a new challenge
+     */
 
-    public function send()
+    public function sendToAll()
     {
 
 
-        $data = array(User::where('id', '!=', Auth::user()->id)->get(['email', 'name']));
-        Mail::send('template/sendtoAll', $data, function ($message) {
-            $message->to('ankitguptag34@gmail.com', 'John Smith')->subject('Welcome!');
-            $message->from('ankitguptag34@gmail.com', 'Ankit');
+
+        dispatch(new App\Jobs\SendEmailJob($details));
+
+
+        $data = array("blah"=>"sda");
+        Mail::send('emails/sendtoAll',$data, function ($message) {
+            $message->to('arju88nair@gmail.com', 'John Smith')->subject('Welcome!');
+            $message->from('arju88nair@gmail.com', 'Nair');
 
         });
 

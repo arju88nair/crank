@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        }, 
+        },
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",
@@ -62,11 +62,11 @@ var c_cppHighlightRules = function() {
         "break|case|continue|default|do|else|for|goto|if|_Pragma|" +
         "return|switch|while|catch|operator|try|throw|using"
     );
-    
+
     var storageType = (
         "asm|__asm__|auto|bool|_Bool|char|_Complex|double|enum|float|" +
         "_Imaginary|int|long|short|signed|struct|typedef|union|unsigned|void|" +
-        "class|wchar_t|template|char16_t|char32_t"
+        "class|wchar_t|emails|char16_t|char32_t"
     );
 
     var storageModifiers = (
@@ -103,7 +103,7 @@ var c_cppHighlightRules = function() {
           + /(\.((-?\d+)|\*(-?\d+\$)?)?)?/.source // precision
           + /(hh|h|ll|l|j|t|z|q|L|vh|vl|v|hv|hl)?/.source // length modifier
           + /(\[[^"\]]+\]|[diouxXDOUeEfFgGaACcSspn%])/.source; // conversion type
-    this.$rules = { 
+    this.$rules = {
         "start" : [
             {
                 token : "comment",
@@ -124,7 +124,7 @@ var c_cppHighlightRules = function() {
                 regex : "'(?:" + escapeRe + "|.)?'"
             }, {
                 token : "string.start",
-                regex : '"', 
+                regex : '"',
                 stateName: "qqstring",
                 next: [
                     { token: "string", regex: /\\\s*$/, next: "qqstring" },
@@ -135,7 +135,7 @@ var c_cppHighlightRules = function() {
                 ]
             }, {
                 token : "string.start",
-                regex : 'R"\\(', 
+                regex : 'R"\\(',
                 stateName: "rawString",
                 next: [
                     { token: "string.end", regex: '\\)"', next: "start" },
@@ -217,7 +217,7 @@ var c_cppHighlightRules = function() {
                 token : "constant.other", // single line
                 regex : '\\s*["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]',
                 next : "start"
-            }, 
+            },
             {
                 token : "constant.other", // single line
                 regex : "\\s*['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']",
@@ -250,7 +250,7 @@ var C_Highlight_File = require("./c_cpp_highlight_rules");
 var CHighlightRules = C_Highlight_File.c_cppHighlightRules;
 
 var ObjectiveCHighlightRules = function() {
-    var escapedConstRe = "\\\\(?:[abefnrtv'\"?\\\\]|" + 
+    var escapedConstRe = "\\\\(?:[abefnrtv'\"?\\\\]|" +
                          "[0-3]\\d{1,2}|" +
                          "[4-7]\\d?|" +
                          "222|" +
@@ -269,7 +269,7 @@ var ObjectiveCHighlightRules = function() {
     var cRules = cObj.getRules();
 
     this.$rules = {
-    "start": [ 
+    "start": [
         {
             token : "comment",
             regex : "\\/\\/.*$"
@@ -279,9 +279,9 @@ var ObjectiveCHighlightRules = function() {
             token : "comment", // multi line comment
             regex : "\\/\\*",
             next : "comment"
-        }, 
+        },
         {
-            token: [ "storage.type.objc", "punctuation.definition.storage.type.objc", 
+            token: [ "storage.type.objc", "punctuation.definition.storage.type.objc",
                        "entity.name.type.objc", "text", "entity.other.inherited-class.objc"
                      ],
             regex: "(@)(interface|protocol)(?!.+;)(\\s+[A-Za-z_][A-Za-z0-9_]*)(\\s*:\\s*)([A-Za-z]+)"
@@ -291,7 +291,7 @@ var ObjectiveCHighlightRules = function() {
             regex: "(@end)"
         },
         {
-            token: [ "storage.type.objc", "entity.name.type.objc", 
+            token: [ "storage.type.objc", "entity.name.type.objc",
                         "entity.other.inherited-class.objc"
                      ],
             regex: "(@implementation)(\\s+[A-Za-z_][A-Za-z0-9_]*)(\\s*?::\\s*(?:[A-Za-z][A-Za-z0-9]*))?"
@@ -552,7 +552,7 @@ var ObjectiveCHighlightRules = function() {
             this.$rules[r] = cRules[r];
         }
     }
-    
+
     this.$rules.bracketed_content = this.$rules.bracketed_content.concat(
         this.$rules.start, specialVariables
     );
@@ -586,7 +586,7 @@ var FoldMode = exports.FoldMode = function(commentRegex) {
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-    
+
     this.foldingStartMarker = /([\{\[\(])[^\}\]\)]*$|^\s*(\/\*)/;
     this.foldingStopMarker = /^[^\[\{\(]*([\}\]\)])|^[\s\*]*(\*\/)/;
     this.singleLineBlockCommentRe= /^\s*(\/\*).*\*\/\s*$/;
@@ -595,42 +595,42 @@ oop.inherits(FoldMode, BaseFoldMode);
     this._getFoldWidgetBase = this.getFoldWidget;
     this.getFoldWidget = function(session, foldStyle, row) {
         var line = session.getLine(row);
-    
+
         if (this.singleLineBlockCommentRe.test(line)) {
             if (!this.startRegionRe.test(line) && !this.tripleStarBlockCommentRe.test(line))
                 return "";
         }
-    
+
         var fw = this._getFoldWidgetBase(session, foldStyle, row);
-    
+
         if (!fw && this.startRegionRe.test(line))
             return "start"; // lineCommentRegionStart
-    
+
         return fw;
     };
 
     this.getFoldWidgetRange = function(session, foldStyle, row, forceMultiline) {
         var line = session.getLine(row);
-        
+
         if (this.startRegionRe.test(line))
             return this.getCommentRegionBlock(session, line, row);
-        
+
         var match = line.match(this.foldingStartMarker);
         if (match) {
             var i = match.index;
 
             if (match[1])
                 return this.openingBracketBlock(session, match[1], row, i);
-                
+
             var range = session.getCommentFoldRange(row, i + match[0].length, 1);
-            
+
             if (range && !range.isMultiLine()) {
                 if (forceMultiline) {
                     range = this.getSectionRange(session, row);
                 } else if (foldStyle != "all")
                     range = null;
             }
-            
+
             return range;
         }
 
@@ -647,7 +647,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             return session.getCommentFoldRange(row, i, -1);
         }
     };
-    
+
     this.getSectionRange = function(session, row) {
         var line = session.getLine(row);
         var startIndent = line.search(/\S/);
@@ -664,7 +664,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             if  (startIndent > indent)
                 break;
             var subRange = this.getFoldWidgetRange(session, "all", row);
-            
+
             if (subRange) {
                 if (subRange.start.row <= startRow) {
                     break;
@@ -676,14 +676,14 @@ oop.inherits(FoldMode, BaseFoldMode);
             }
             endRow = row;
         }
-        
+
         return new Range(startRow, startColumn, endRow, session.getLine(endRow).length);
     };
     this.getCommentRegionBlock = function(session, line, row) {
         var startColumn = line.search(/\s*$/);
         var maxRow = session.getLength();
         var startRow = row;
-        
+
         var re = /^\s*(?:\/\*|\/\/|--)#?(end)?region\b/;
         var depth = 1;
         while (++row < maxRow) {
@@ -736,4 +736,3 @@ exports.Mode = Mode;
                         }
                     });
                 })();
-            

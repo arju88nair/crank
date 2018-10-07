@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        }, 
+        },
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",
@@ -164,7 +164,7 @@ var PerlHighlightRules = function() {
         ],
         "block_comment": [
             {
-                token: "comment.doc", 
+                token: "comment.doc",
                 regex: "^=cut\\b",
                 next: "start"
             },
@@ -405,7 +405,7 @@ var JsonHighlightRules = function() {
             }
         ]
     };
-    
+
 };
 
 oop.inherits(JsonHighlightRules, TextHighlightRules);
@@ -934,7 +934,7 @@ var PgsqlHighlightRules = function() {
         "sequence|sequences|serializable|server|session|session_user|set|setof|share|show|similar|" +
         "simple|smallint|smgr|snapshot|some|stable|standalone|start|statement|statistics|stdin|" +
         "stdout|storage|strict|strip|substring|symmetric|sysid|system|table|tables|tablespace|temp|" +
-        "template|temporary|text|then|tid|time|timestamp|timestamptz|timetz|tinterval|to|trailing|" +
+        "emails|temporary|text|then|tid|time|timestamp|timestamptz|timetz|tinterval|to|trailing|" +
         "transaction|treat|trigger|trim|true|truncate|trusted|tsquery|tsrange|tstzrange|tsvector|" +
         "txid_snapshot|type|types|unbounded|uncommitted|unencrypted|union|unique|unknown|unlisten|" +
         "unlogged|until|update|user|using|uuid|vacuum|valid|validate|validator|value|values|varbit|" +
@@ -1485,7 +1485,7 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = "--";
     this.blockComment = {start: "/*", end: "*/"};
 
-    this.getNextLineIndent = function(state, line, tab) { 
+    this.getNextLineIndent = function(state, line, tab) {
         if (state == "start" || state == "keyword.statementEnd") {
             return "";
         } else {
@@ -1505,4 +1505,3 @@ exports.Mode = Mode;
                         }
                     });
                 })();
-            

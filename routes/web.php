@@ -21,6 +21,7 @@ Auth::routes();
  Route::get('/newchallenge','HomeController@newchallenge')->name('newchallenge');
  //====================Mail Controller===============
  Route::get('/send','MailController@send')->name('send');
+
 Route::get('/sentoAll','MailController@sendtoAll')->name('sendtoAll');
 
 //========================Submission Controller============================
@@ -51,4 +52,14 @@ Route::get('/submittedusers','SubmissionController@submitted_users')->name('subm
  //validator
  Route::post('/validator', 'ChallengeController@validator')->name('validator');
 //===========================================================================
+
+
+
+Route::get('email', function() {
+
+    $details['email'] = 'arju88nair@gmail.com';
+
+    dispatch(new App\Jobs\SendEmailJob($details));
+
+});
 
